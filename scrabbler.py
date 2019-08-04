@@ -7,7 +7,7 @@ def main():
 	dictionary=[]
 	if len(sys.argv)>2:
 		currentstring=sys.argv[1].lower()
-
+		originalstring=sys.argv[1]
 		for x in sys.argv[1]:
 			letters.append(x)
 		# Length of the word being tested
@@ -43,8 +43,13 @@ def main():
 				if not counter<=counter2:
 					passed=0
 					break
-			if passed==1:
-				print word
+		if passed==1:
+			for x in range(0,wordlength):
+				if originalstring[x].isupper():
+					if not originalstring[x].lower()==temp[x]:
+						passed=0
+		if passed==1:
+			print word	
 											
 				
 	

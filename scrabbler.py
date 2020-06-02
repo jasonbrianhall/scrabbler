@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 import sys
 
@@ -13,12 +13,12 @@ def main():
 		# Length of the word being tested
 		wordlength=int(sys.argv[2])
 	else:
-		print "Not enough arguments; requires characters and word length"
+		print("Not enough arguments; requires characters and word length")
 		exit(1)
 	try:
 		f = open("linux.words", "r")
 	except:
-		print "The file linux.words is not found; it's usually found in /usr/share/dict/linux.words; copy it into the currect directory"
+		print("The file linux.words is not found; it's usually found in /usr/share/dict/linux.words; copy it into the currect directory")
 		exit(1)
 	for x in f:
 		# String out Extra Spaces and New Lines
@@ -49,7 +49,7 @@ def main():
 					if not originalstring[x].lower()==temp[x]:
 						passed=0
 		if passed==1:
-			print word	
+			print(word)
 											
 				
 	

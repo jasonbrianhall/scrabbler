@@ -3,16 +3,16 @@ from optparse import OptionParser
 
 import sys
 
-def main(inputstring, wordlength, dictionaryfile="linux.words"):
+def getwords(inputstring, wordlength, dictionaryfile="linux.words"):
 	letters=[]
 	dictionary=[]
 	currentstring=inputstring.lower()
 	originalstring=inputstring
+	words=[]
 	for x in inputstring:
 		letters.append(x)
 	
 	try:
-		print(dictionaryfile)
 		f = open(dictionaryfile, "r")
 	except:
 		if dicontaryfile=="linux.words":
@@ -49,7 +49,8 @@ def main(inputstring, wordlength, dictionaryfile="linux.words"):
 					if not originalstring[x].lower()==temp[x]:
 						passed=0
 		if passed==1:
-			print(word)
+			words.append(word)
+	return words
 											
 				
 	
@@ -71,8 +72,11 @@ if __name__ == "__main__":
 		print("Length is required, see -h")
 		exit(1)
 
-	if option.dictionary:
-		main(options.chars, int(options.length), options.dictionary)
+	if options.dictionary:
+		words=getwords(options.chars, int(options.length), options.dictionary)
 	else:
-		main(options.chars, int(options.length))
+		words=getwords(options.chars, int(options.length))
+
+	for x in words:
+		print(x)
 

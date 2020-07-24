@@ -1,24 +1,24 @@
 #!/usr/bin/env python
+from optparse import OptionParser
 
 import sys
 
-def main():
+def main(inputstring, wordlength, dictionaryfile="linux.words"):
 	letters=[]
 	dictionary=[]
-	if len(sys.argv)>2:
-		currentstring=sys.argv[1].lower()
-		originalstring=sys.argv[1]
-		for x in sys.argv[1]:
-			letters.append(x)
-		# Length of the word being tested
-		wordlength=int(sys.argv[2])
-	else:
-		print("Not enough arguments; requires characters and word length")
-		exit(1)
+	currentstring=inputstring.lower()
+	originalstring=inputstring
+	for x in inputstring:
+		letters.append(x)
+	
 	try:
-		f = open("linux.words", "r")
+		print(dictionaryfile)
+		f = open(dictionaryfile, "r")
 	except:
-		print("The file linux.words is not found; it's usually found in /usr/share/dict/linux.words; copy it into the currect directory")
+		if dicontaryfile=="linux.words":
+			print("The file linux.words was not found; it's usually found in /usr/share/dict/linux.words; copy it into the currect directory")
+		else:
+			print("The file " + dictionaryfile + " was not found; please verify the file exists.") 
 		exit(1)
 	for x in f:
 		# String out Extra Spaces and New Lines
@@ -55,5 +55,24 @@ def main():
 	
 
 if __name__ == "__main__":
-	main()
+	parser = OptionParser()
+	parser.add_option("-c", "--chars", help="Characters")
+	parser.add_option("-l", "--length", help="Length of Characters")
+	parser.add_option("-d", "--dictionary", help="Dictionary File")
+
+
+	(options, args) = parser.parse_args()
+
+	if not options.chars:
+		print("Characters are required, see -h")
+		exit(1)
+
+	if not options.length:
+		print("Length is required, see -h")
+		exit(1)
+
+	if option.dictionary:
+		main(options.chars, int(options.length), options.dictionary)
+	else:
+		main(options.chars, int(options.length))
 

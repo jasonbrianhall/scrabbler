@@ -1,7 +1,8 @@
 #!/usr/bin/env python
-from optparse import OptionParser
 
+from optparse import OptionParser
 import sys
+import random 
 
 def getwords(inputstring, wordlength, dictionaryfile="linux.words"):
 	letters=[]
@@ -15,7 +16,7 @@ def getwords(inputstring, wordlength, dictionaryfile="linux.words"):
 	try:
 		f = open(dictionaryfile, "r")
 	except:
-		if dicontaryfile=="linux.words":
+		if dictionaryfile=="linux.words":
 			print("The file linux.words was not found; it's usually found in /usr/share/dict/linux.words; copy it into the currect directory")
 		else:
 			print("The file " + dictionaryfile + " was not found; please verify the file exists.") 
@@ -52,15 +53,31 @@ def getwords(inputstring, wordlength, dictionaryfile="linux.words"):
 			words.append(word)
 	return words
 											
-				
-	
+'''def anagrams(inputstring, dictonaryfile):
+	inputstring=inputstring.lower()
+	length=len(inputstring)
+	list=[]
+	for x in range(length):
+		list.append(x)
+	random.shuffle(list)
+	for x in list:
+		words=getwords(options.chars, x, dictionary)
+		for y in words:
+			temp=inputstring
+			temp2=""
+			for z in y:
+				if not z in temp:
+					temp2=z+temp2
+						
+			print(temp2)
+	return []'''	
 
 if __name__ == "__main__":
 	parser = OptionParser()
 	parser.add_option("-c", "--chars", help="Characters")
-	parser.add_option("-l", "--length", help="Length of Characters")
-	parser.add_option("-d", "--dictionary", help="Dictionary File")
-
+	parser.add_option("-l", "--length", type="int", help="Length of Characters")
+	parser.add_option("-d", "--dictionary", help="Dictionary File", default="linux.words")
+	#parser.add_option("-a", "--anagram", action="store_true", default=False, help="Generate Anagrams (ignores length)")
 
 	(options, args) = parser.parse_args()
 
@@ -68,14 +85,27 @@ if __name__ == "__main__":
 		print("Characters are required, see -h")
 		exit(1)
 
+	'''if not options.anagram:
+		if not options.length:
+			print("Length is required, see -h (not required if using anagram)")
+			exit(1)'''
+
 	if not options.length:
 		print("Length is required, see -h")
 		exit(1)
 
-	if options.dictionary:
-		words=getwords(options.chars, int(options.length), options.dictionary)
+
+	if not options.dictionary:
+		dictionary="linux.words"
 	else:
-		words=getwords(options.chars, int(options.length))
+		dictionary=options.dictionary
+
+	'''if options.anagram:
+		words=anagrams(options.chars, dictionary)
+	else:
+		words=getwords(options.chars, int(options.length), dictionary)'''
+
+	words=getwords(options.chars, int(options.length), dictionary)
 
 	for x in words:
 		print(x)

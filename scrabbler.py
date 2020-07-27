@@ -3,16 +3,11 @@
 from optparse import OptionParser
 import sys
 import random 
+import string
 
-def getwords(inputstring, wordlength, dictionaryfile="linux.words"):
-	letters=[]
+def loaddictionary(dictionaryfile="linux.words"):
 	dictionary=[]
-	currentstring=inputstring.lower()
-	originalstring=inputstring
-	words=[]
-	for x in inputstring:
-		letters.append(x)
-	
+	ascii= set(string.ascii_lowercase)
 	try:
 		f = open(dictionaryfile, "r")
 	except:
@@ -20,14 +15,34 @@ def getwords(inputstring, wordlength, dictionaryfile="linux.words"):
 			print("The file linux.words was not found; it's usually found in /usr/share/dict/linux.words; copy it into the currect directory")
 		else:
 			print("The file " + dictionaryfile + " was not found; please verify the file exists.") 
-		exit(1)
+		return []
+	prev=""
 	for x in f:
+		# String out Extra Spaces and New Lines
+		temp=x.rstrip().lower()
+		if all(y in ascii for y in temp):
+			if not prev==temp:
+				dictionary.append(temp)
+			prev=temp
+	return dictionary
+
+
+
+def getwords(inputstring, wordlength, dictionarydata):
+	letters=[]
+	dictionary=[]
+	currentstring=inputstring.lower()
+	originalstring=inputstring
+	words=[]
+	for x in inputstring:
+		letters.append(x)
+
+	for x in dictionarydata:
 		# String out Extra Spaces and New Lines
 		temp=x.rstrip()
 		# Don't add anything to a dictonary that is too short or too long
 		if len(temp)==wordlength:
 			dictionary.append(temp)
-	f.close()
 
 	for word in dictionary:
 		# Make case insensitive
@@ -105,7 +120,8 @@ if __name__ == "__main__":
 	else:
 		words=getwords(options.chars, int(options.length), dictionary)'''
 
-	words=getwords(options.chars, int(options.length), dictionary)
+	dictionarydata=loaddictionary(dictionary)
+	words=getwords(options.chars, int(options.length), dictionarydata)
 
 	for x in words:
 		print(x)

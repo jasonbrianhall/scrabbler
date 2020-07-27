@@ -68,7 +68,7 @@ def getwords(inputstring, wordlength, dictionarydata):
 			words.append(word)
 	return words
 											
-def anagrams(inputstring, dictonarydata, depth=0, prev=""):
+def anagrams(inputstring, dictonarydata, depth=0, maxdepth=2, prev=""):
 	dictionary=[]
 	inputstring=inputstring.lower()
 	length=len(inputstring)
@@ -90,8 +90,8 @@ def anagrams(inputstring, dictonarydata, depth=0, prev=""):
 				else:
 					dictionary.append(prev + " " + y + " " + k)
 					print(prev + " " + y + " " + k)
-			if prev=="":
-				anagrams(inputstring, dictionarydata, depth=depth+1, prev=y)
+			'''if depth<maxdepth:
+				anagrams(temp, dictionarydata, depth=depth+1, maxdepth=maxdepth, prev=y)'''
 	return dictionary
 		
 
@@ -101,6 +101,7 @@ if __name__ == "__main__":
 	parser.add_option("-l", "--length", type="int", help="Length of Characters")
 	parser.add_option("-d", "--dictionary", help="Dictionary File", default="linux.words")
 	parser.add_option("-a", "--anagram", action="store_true", default=False, help="Generate Anagrams (ignores length)")
+	parser.add_option("-D", "--depth", type="int", help="Length of Characters")
 
 	(options, args) = parser.parse_args()
 
@@ -126,7 +127,7 @@ if __name__ == "__main__":
 	dictionarydata=loaddictionary(dictionary)
 
 	if options.anagram:
-		words=anagrams(options.chars, dictionarydata)
+		words=anagrams(options.chars, dictionarydata, depth=0, maxdepth=2)
 	else:
 		words=getwords(options.chars, int(options.length), dictionarydata)
 

@@ -136,14 +136,20 @@ if __name__ == "__main__":
 	dictionarydata=loaddictionary(dictionary)
 
 	if options.anagram:
-		if options.depth:
-			maxdepth=options.depth
-		else:
+		try:
+			if options.depth>=0:
+				maxdepth=options.depth
+			else:
+				maxdepth=3
+		except:
 			maxdepth=3
-
-		if options.minlength:
-			minlength=options.minlength
-		else:
+	
+		try:
+			if options.minlength>=0:
+				minlength=options.minlength
+			else:
+				minlength=3
+		except:
 			minlength=3
 
 		words=anagrams(options.chars, dictionarydata, dictionary=[], minlength=minlength, depth=0, maxdepth=maxdepth)

@@ -75,9 +75,11 @@ def anagrams(inputstring, dictonarydata, dictionary, minlength=3, depth=0, maxde
 	for x in range(length):
 		if x>=minlength:
 			list.append(x)
-	#random.shuffle(list)
+	random.shuffle(list)
 	for x in list:
 		words=getwords(inputstring, x, dictionarydata)
+		random.shuffle(words)
+
 		for y in words:
 			temp=inputstring
 			for z in y:

@@ -68,14 +68,14 @@ def getwords(inputstring, wordlength, dictionarydata):
 			words.append(word)
 	return words
 											
-def anagrams(inputstring, dictonarydata, depth=0, maxdepth=2, prev=""):
-	dictionary=[]
+def anagrams(inputstring, dictonarydata, dictionary, minlength=3, depth=0, maxdepth=2, prev=""):
 	inputstring=inputstring.lower()
 	length=len(inputstring)
 	list=[]
 	for x in range(length):
-		list.append(x)
-	random.shuffle(list)
+		if x>=minlength:
+			list.append(x)
+	#random.shuffle(list)
 	for x in list:
 		words=getwords(inputstring, x, dictionarydata)
 		for y in words:
@@ -85,13 +85,18 @@ def anagrams(inputstring, dictonarydata, depth=0, maxdepth=2, prev=""):
 			words2=getwords(temp, len(temp), dictionarydata)
 			for k in words2:
 				if prev=="":
-					dictionary.append(y + " " + k)
+					#dictionary.append(y + " " + k)
 					print(y + " " + k)
 				else:
-					dictionary.append(prev + " " + y + " " + k)
+					#dictionary.append(prev + " " + y + " " + k)
 					print(prev + " " + y + " " + k)
-			'''if depth<maxdepth:
-				anagrams(temp, dictionarydata, depth=depth+1, maxdepth=maxdepth, prev=y)'''
+			if depth<maxdepth:
+				if prev=="":
+					anagrams(temp, dictionarydata, dictionary, minlength=minlength, depth=depth+1, maxdepth=maxdepth, prev=y)
+				else:
+					anagrams(temp, dictionarydata, dictionary, minlength=minlength, depth=depth+1, maxdepth=maxdepth, prev=prev + " " + y)
+			#print("word: " + y + " Temp: " + temp + " Inputstring: " + inputstring)
+							
 	return dictionary
 		
 
@@ -101,7 +106,9 @@ if __name__ == "__main__":
 	parser.add_option("-l", "--length", type="int", help="Length of Characters")
 	parser.add_option("-d", "--dictionary", help="Dictionary File", default="linux.words")
 	parser.add_option("-a", "--anagram", action="store_true", default=False, help="Generate Anagrams (ignores length)")
-	parser.add_option("-D", "--depth", type="int", help="Length of Characters")
+	parser.add_option("-D", "--depth", type="int", help="Depth of Anagram Search (default is 3)")
+	parser.add_option("-m", "--minlength", type="int", help="Min Length of Anagram Word (default is 3)")
+	
 
 	(options, args) = parser.parse_args()
 
@@ -127,7 +134,17 @@ if __name__ == "__main__":
 	dictionarydata=loaddictionary(dictionary)
 
 	if options.anagram:
-		words=anagrams(options.chars, dictionarydata, depth=0, maxdepth=2)
+		if options.depth:
+			maxdepth=options.depth
+		else:
+			maxdepth=3
+
+		if options.minlength:
+			minlength=options.minlength
+		else:
+			minlength=3
+
+		words=anagrams(options.chars, dictionarydata, dictionary=[], minlength=minlength, depth=0, maxdepth=maxdepth)
 	else:
 		words=getwords(options.chars, int(options.length), dictionarydata)
 

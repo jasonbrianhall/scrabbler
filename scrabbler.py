@@ -68,7 +68,8 @@ def getwords(inputstring, wordlength, dictionarydata):
 			words.append(word)
 	return words
 											
-def anagrams(inputstring, dictonarydata):
+def anagrams(inputstring, dictonarydata, depth=0, prev=""):
+	dictionary=[]
 	inputstring=inputstring.lower()
 	length=len(inputstring)
 	list=[]
@@ -83,8 +84,15 @@ def anagrams(inputstring, dictonarydata):
 				temp=temp.replace(z, "", 1)
 			words2=getwords(temp, len(temp), dictionarydata)
 			for k in words2:
-				print(y + " " + k)
-	return []
+				if prev=="":
+					dictionary.append(y + " " + k)
+					print(y + " " + k)
+				else:
+					dictionary.append(prev + " " + y + " " + k)
+					print(prev + " " + y + " " + k)
+			if prev=="":
+				anagrams(inputstring, dictionarydata, depth=depth+1, prev=y)
+	return dictionary
 		
 
 if __name__ == "__main__":

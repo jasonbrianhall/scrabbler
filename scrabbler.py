@@ -68,7 +68,7 @@ def getwords(inputstring, wordlength, dictionarydata):
 			words.append(word)
 	return words
 											
-'''def anagrams(inputstring, dictonaryfile):
+def anagrams(inputstring, dictonarydata):
 	inputstring=inputstring.lower()
 	length=len(inputstring)
 	list=[]
@@ -76,23 +76,23 @@ def getwords(inputstring, wordlength, dictionarydata):
 		list.append(x)
 	random.shuffle(list)
 	for x in list:
-		words=getwords(options.chars, x, dictionary)
+		words=getwords(inputstring, x, dictionarydata)
 		for y in words:
 			temp=inputstring
-			temp2=""
 			for z in y:
-				if not z in temp:
-					temp2=z+temp2
-						
-			print(temp2)
-	return []'''	
+				temp=temp.replace(z, "", 1)
+			words2=getwords(temp, len(temp), dictionarydata)
+			for k in words2:
+				print(y + " " + k)
+	return []
+		
 
 if __name__ == "__main__":
 	parser = OptionParser()
 	parser.add_option("-c", "--chars", help="Characters")
 	parser.add_option("-l", "--length", type="int", help="Length of Characters")
 	parser.add_option("-d", "--dictionary", help="Dictionary File", default="linux.words")
-	#parser.add_option("-a", "--anagram", action="store_true", default=False, help="Generate Anagrams (ignores length)")
+	parser.add_option("-a", "--anagram", action="store_true", default=False, help="Generate Anagrams (ignores length)")
 
 	(options, args) = parser.parse_args()
 
@@ -100,14 +100,14 @@ if __name__ == "__main__":
 		print("Characters are required, see -h")
 		exit(1)
 
-	'''if not options.anagram:
+	if not options.anagram:
 		if not options.length:
 			print("Length is required, see -h (not required if using anagram)")
-			exit(1)'''
+			exit(1)
 
-	if not options.length:
+	'''if not options.length:
 		print("Length is required, see -h")
-		exit(1)
+		exit(1)'''
 
 
 	if not options.dictionary:
@@ -115,13 +115,14 @@ if __name__ == "__main__":
 	else:
 		dictionary=options.dictionary
 
-	'''if options.anagram:
-		words=anagrams(options.chars, dictionary)
-	else:
-		words=getwords(options.chars, int(options.length), dictionary)'''
-
 	dictionarydata=loaddictionary(dictionary)
-	words=getwords(options.chars, int(options.length), dictionarydata)
+
+	if options.anagram:
+		words=anagrams(options.chars, dictionarydata)
+	else:
+		words=getwords(options.chars, int(options.length), dictionarydata)
+
+	#words=getwords(options.chars, int(options.length), dictionarydata)
 
 	for x in words:
 		print(x)
